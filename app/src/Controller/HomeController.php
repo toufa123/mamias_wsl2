@@ -21,17 +21,17 @@ class HomeController extends AbstractController
 	public function index (Breadcrumbs $breadcrumbs)
 	{
 
-		$breadcrumbs->addItem ("Home", $this->get ("router")->generate ("index"));
-		$em = $this->getDoctrine ()->getManager ();
+        $breadcrumbs->addItem("Home", $this->get("router")->generate("home"));
+        $em = $this->getDoctrine()->getManager();
 
-		//nombre total de NIS validated dans le catalogue
-		$NISCount = $em->getRepository (Catalogue::class)->getNb ();
-		//nombre total de NIS validated dans le catalogue
-		$NIStotal = $em->getRepository (Catalogue::class)->getallNb ();
-		//nombre total de national occurences dans MAMIAS
-		$DistroCount = $em->getRepository (CountryDistribution::class)->getNb ();
-		//dump($DistroCount);die;
-		//nombre total de national occurences dans MAMIAS
+        //nombre total de NIS validated dans le catalogue
+        $NISCount = $em->getRepository(Catalogue::class)->getNb();
+        //nombre total de NIS validated dans le catalogue
+        $NIStotal = $em->getRepository(Catalogue::class)->getallNb();
+        //nombre total de national occurences dans MAMIAS
+        $DistroCount = $em->getRepository(CountryDistribution::class)->getNb();
+        //dump($DistroCount);die;
+        //nombre total de national occurences dans MAMIAS
 		$GeoCount = $em->getRepository (GeoOccurence::class)->getNb ();
 		//last date for the catalogue
 		$catDate = $em->getRepository (Catalogue::class)->getlastaddeddate ();

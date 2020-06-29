@@ -22,14 +22,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class SearchController extends AbstractController
 {
     /**
      * @Route("services/search", name="search")
      */
-    public function index (Request $request)
+    public function index(Request $request, Breadcrumbs $breadcrumbs)
     {
+        $breadcrumbs->prependRouteItem("Home", "home");
+        $breadcrumbs->addItem("MAMIAS services/Mamias search", $this->get("router")->generate("search"));
         $sId = null;
         $eco = null;
         $origin = null;
@@ -40,6 +43,7 @@ class SearchController extends AbstractController
         $ecapmed = null;
         $status = null;
         $pathway = null;
+        $ec = null;
         $search = new SearchSpecies();
         $form = $this->createForm (SearchType::class, $search);
 
@@ -117,22 +121,16 @@ class SearchController extends AbstractController
     {
         $em = $this->getDoctrine ()->getEntityManager ();
         $entity = $em->getRepository (Mamias::class)->find ($id);
-        //$EntityDistro = $entity->getDistribution();
-        //dump($entity->getGeo());die;
-        //$NbperCountry =[];
-
         $NbperCountry = json_encode (
             $em->getRepository (CountryDistribution::class)->findSpeciesByParametres ($id)
         );
 
         $NbperCountry1 =
             $em->getRepository (CountryDistribution::class)->findSpeciesByParametres ($id);
-        //$data =[];
+
         foreach ($NbperCountry1 as $key => $value) {
             $data[$key] = [$value['country'], $value['count']];
         }
-        //dump($NbperCountry1, $data );die;
-
         if (!$entity) {
             throw $this->createNotFoundException ('Unable to find the Species.');
         }

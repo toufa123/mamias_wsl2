@@ -95,27 +95,27 @@ class MamiasRepository extends ServiceEntityRepository
 
 	public function getNbInvasive ()
 	{
-		return $this->createQueryBuilder ('a')
-			->select ('COUNT(a)')
-			->Where ('a.Success=8')
-			->getQuery ()
-			->getSingleScalarResult ();
-	}
+        return $this->createQueryBuilder('a')
+            ->select('COUNT(a)')
+            ->Where('a.Success=8')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 
-	/**
-	 * @return Mamias[] Returns an array of Mamias objects
-	 */
-	public function findSpeciesByParametres ($sId, $eco, $origin, $su, $year, $country, $reg, $status, $pathway)
-	{
+    /**
+     * @return Mamias[] Returns an array of Mamias objects
+     */
+    public function findSpeciesByParametres($sId, $eco, $origin, $su, $year, $country, $status, $pathway, $ecapmed)
+    {
 
-		$query = $this->createQueryBuilder ('m');
-		$query = $query
-			->select ('m')
-			->AddSelect ('m.id')
-			->AddSelect ('m.firstMedSighting')
-			->leftJoin ('m.Distribution', 'c')
-			->addSelect ('c')
-			->leftJoin ('m.relation', 'Catalogue')
+        $query = $this->createQueryBuilder('m');
+        $query = $query
+            ->select('m')
+            ->AddSelect('m.id')
+            ->AddSelect('m.firstMedSighting')
+            ->leftJoin('m.Distribution', 'c')
+            ->addSelect('c')
+            ->leftJoin('m.relation', 'Catalogue')
 			->addSelect ('Catalogue.Species')
 			->leftJoin ('m.Ecofunctional', 'Ecofunctional')
 			->addSelect ('Ecofunctional.ecofunctional')
@@ -143,26 +143,30 @@ class MamiasRepository extends ServiceEntityRepository
 		}
 		if (!empty($su)) {
 			$query = $query->andWhere ('m.Success = :val4')
-				->setParameter ('val4', $su);
-		}
-		if (!empty($country)) {
-			$query = $query->andWhere ('c.country = :val4')
-				->setParameter ('val4', $country);
-		}
-		//if (!empty($reg)) {
-		//    $query = $query->andWhere ('c.regionalSea = :val4')
-		//        ->setParameter ('val4', $reg);
-		//}
+                ->setParameter('val4', $su);
+        }
+        if (!empty($country)) {
+            $query = $query->andWhere('c.country = :val4')
+                ->setParameter('val4', $country);
+        }
+        //if (!empty($reg)) {
+        //    $query = $query->andWhere ('c.regionalSea = :val4')
+        //        ->setParameter ('val4', $reg);
+        //}
+        if (!empty($ecapmed)) {
+            $query = $query->andWhere('c.ecap = :val7')
+                ->setParameter('val', $ecapmed);
+        }
 
-		if (!empty($status)) {
-			$query = $query->andWhere ('m.speciesstatus = :val5')
-				->setParameter ('val5', $status);
-		}
+        if (!empty($status)) {
+            $query = $query->andWhere('m.speciesstatus = :val5')
+                ->setParameter('val5', $status);
+        }
 
-		if (!empty($pathway)) {
-			$query = $query->andWhere ('m.pathway = :val6')
-				->setParameter ('val6', $pathway);
-		}
+        if (!empty($pathway)) {
+            $query = $query->andWhere('m.pathway = :val6')
+                ->setParameter('val6', $pathway);
+        }
 		return $query->getQuery ()->getArrayResult ();
 	}
 
