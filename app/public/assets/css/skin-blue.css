@@ -1,13 +1,17 @@
 /*
  * Skin: Blue
  * ----------
- */
+
+
+*/
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,600,700,300italic,400italic,600italic);
+
 .skin-blue .main-header .navbar {
     background-color: #00aeef;
 }
 
 .skin-blue .main-header .navbar .nav > li > a {
-    font-family: "Roboto Light";
+    font-family: "Roboto";
     font-size: 13px;
     color: #ffffff;
 }
