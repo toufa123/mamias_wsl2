@@ -203,7 +203,7 @@ class SpeciesDeclarationController extends Controller
 
             $spreadsheet = $reader->load ($uploadfile);
             $sheetData = $spreadsheet->getActiveSheet ()->toArray ();
-            //dump($sheetData);die;
+            dump($sheetData);die;
 
             $request->getSession ()
                 ->getFlashBag ()
@@ -243,7 +243,7 @@ class SpeciesDeclarationController extends Controller
         $sheet1->setCellValue ('A1', 'Country');
         $sheet1->getColumnDimension ('A')
             ->setAutoSize (false)->setWidth (30);
-        $sheet1->setCellValue ('B1', 'NIS');
+        $sheet1->setCellValue ('B1', 'NIS Species');
         $sheet1->getColumnDimension ('B')
             ->setAutoSize (false);
         //->setWidth(30);
@@ -263,7 +263,7 @@ class SpeciesDeclarationController extends Controller
             ->setAutoSize (true);
         $sheet1->getStyle ('E:E')
             ->getNumberFormat ()->setFormatCode (\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);
-        $sheet1->setCellValue ('G1', 'Type of Observation');
+        $sheet1->setCellValue ('G1', 'Coverage/Nb of Inviduals');
         $sheet1->getColumnDimension ('G')->setAutoSize (true);
         $sheet1->setCellValue ('F1', 'Values');
         $sheet1->getColumnDimension ('F')->setAutoSize (true);
@@ -279,7 +279,7 @@ class SpeciesDeclarationController extends Controller
         $sheet1->setTitle ("GeoOccurences");
         $sheet1->getActiveCell ('A2');
         $sheet1->getStyle ('c:c')
-            ->getNumberFormat ()->setFormatCode ('yyyy-mm-dd');
+            ->getNumberFormat ()->setFormatCode ('dd/mm/yyyy');
 
         $sheet1->setSelectedCell ('A2');
 
@@ -296,21 +296,24 @@ class SpeciesDeclarationController extends Controller
         //    ->setSheetState(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::SHEETSTATE_HIDDEN);
         //$spreadsheet->setActiveSheetIndex(1);
         //$spreadsheet->getActiveSheet()->setTitle('NIS');
-        $sheet1->setCellValue ('AA1', 'ID');
-        $sheet1->getColumnDimension ('AA')->setAutoSize (true);
-        $sheet1->getColumnDimension ('AA')->setVisible (false);
-        $sheet1->setCellValue ('AB1', 'NIS');
-        $sheet1->getColumnDimension ('AB')
+        $sheet2 = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'NIS List');
+        $spreadsheet->addSheet($sheet2, 2);
+
+        $sheet2->setCellValue ('A1', 'ID');
+        $sheet2->getColumnDimension ('A')->setAutoSize (true);
+        //$sheet2->getColumnDimension ('A')->setVisible (false);
+        $sheet2->setCellValue ('B1', 'NIS');
+        $sheet2->getColumnDimension ('B')
             ->setAutoSize (true);
-        $sheet1->getColumnDimension ('AB')->setVisible (false);
+        //$sheet2->getColumnDimension ('B')->setVisible (false);
 
 
         $row = 2;
         foreach ($species as $e) {
             //$spreadsheet->setActiveSheetIndex(1)
-            $sheet1
-                ->setCellValue ('AA' . $row, $e->getRelation ()->getId ())
-                ->setCellValue ('AB' . $row, $e->getRelation ()->getSpecies ());
+            $sheet2
+                ->setCellValue ('A' . $row, $e->getRelation ()->getId ())
+                ->setCellValue ('B' . $row, $e->getRelation ()->getSpecies ());
             $row++;
         }
 
@@ -321,17 +324,22 @@ class SpeciesDeclarationController extends Controller
         //    ->setSheetState(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::SHEETSTATE_HIDDEN);
         //$spreadsheet->setActiveSheetIndex(2);
         //$spreadsheet->getActiveSheet()->setTitle('Countries');
-        $sheet1->setCellValue ('X1', 'ID');
-        $sheet1->getColumnDimension ('X')->setVisible (false);
-        $sheet1->getColumnDimension ('X')->setAutoSize (true);
-        $sheet1->setCellValue ('Y1', 'Country');
-        $sheet1->getColumnDimension ('Y')->setAutoSize (true);
-        $sheet1->getColumnDimension ('Y')->setVisible (false);
+
+
+        $sheet3 = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'country');
+        $spreadsheet->addSheet($sheet3, 3);
+
+        $sheet3->setCellValue ('A1', 'ID');
+        //$sheet3->getColumnDimension ('A')->setVisible (false);
+        $sheet3->getColumnDimension ('A')->setAutoSize (true);
+        $sheet3->setCellValue ('B1', 'Country');
+        $sheet3->getColumnDimension ('B')->setAutoSize (true);
+        //$sheet3->getColumnDimension ('B')->setVisible (false);
         $row2 = 2;
         foreach ($country as $c) {
-            $sheet1
-                ->setCellValue ('X' . $row2, $c->getId ())
-                ->setCellValue ('Y' . $row2, $c->getCountry ());
+            $sheet3
+                ->setCellValue ('A' . $row2, $c->getId ())
+                ->setCellValue ('B' . $row2, $c->getCountry ());
             $row2++;
         }
 
@@ -352,7 +360,7 @@ class SpeciesDeclarationController extends Controller
             $validation->setPromptTitle ('Pick from list');
             $validation->setPrompt ('Please pick a value from the drop-down list.');
             $validation->setShowDropDown ('true');
-            $validation->setFormula1 ('$Y$2:$Y$' . $row2);
+            $validation->setFormula1 ('\'country\'!$B$2:$B$' . $row2);
             $sheet1->getColumnDimension ('B')->setWidth (20);
 
             //NIS List
@@ -368,7 +376,8 @@ class SpeciesDeclarationController extends Controller
             $validation1->setPromptTitle ('Pick from list');
             $validation1->setPrompt ('Please pick a value from the drop-down list.');
             $validation1->setShowDropDown ('true');
-            $validation1->setFormula1 ('$AB$2:$AB$' . $row);
+
+            $validation1->setFormula1 ('\'NIS List\'!$B$2:$B$' . $row);
             $sheet1->getColumnDimension ('B')->setWidth (30);
 
             $validation2 = $spreadsheet->getActiveSheet ()->getCell ('G' . $i)
