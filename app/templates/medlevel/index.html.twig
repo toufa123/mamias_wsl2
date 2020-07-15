@@ -82,13 +82,31 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="property-card bg-white">
+                <div class="property-content">
+                    <div id="piechart1"
+                         style="min-width: 50%; max-width: 100%;height: 500px; margin: 0 auto; "></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="property-card bg-white">
+                <div class="property-content">
+                    <div id="linechart1"
+                         style="min-width: 500px; max-width: 100%;height: 500px; margin: 0 auto;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-lg-6">
             <div class="property-card bg-white">
                 <div class="property-content">
-                    <div id="piechart1"
-                         style="min-width: 50%; max-width: 100%;height: 500px; margin: 0 auto; "></div>
+                    <div id="piechart4"
+                         style="min-width: 400px; max-width: 100%;height: 500px; margin: 0 auto;"></div>
                 </div>
             </div>
         </div>
@@ -148,9 +166,6 @@
 
 {% endblock %}
 
-
-
-
 {% block javascripts %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
@@ -173,9 +188,11 @@
         {{ chart(piechart2) }}
         {{ chart(barchart1) }}
         {{ chart(piechart3) }}
+        {{ chart(piechart4) }}
         {{ chart(barchart2) }}
         {{ chart(linechart) }}
         {{ chart(barchart3) }}
+        {{ chart(linechart1) }}
 
     </script>
 
