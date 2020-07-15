@@ -188,56 +188,79 @@ class MamiasRepository extends ServiceEntityRepository
 	public function getSpeciesPerCountry ()
 	{
 		$rawSql = 'SELECT country.country As Country, (SELECT COUNT(DISTINCT mamias.id)) As z '
-			. 'FROM mamias , country_distribution , country '
-			. ' WHERE mamias.id = country_distribution.mamias_id AND country_distribution.country_id = country.id '
-			. ' GROUP BY country.country ORDER BY country.country ASC';
+            . 'FROM mamias , country_distribution , country '
+            . ' WHERE mamias.id = country_distribution.mamias_id AND country_distribution.country_id = country.id '
+            . ' GROUP BY country.country ORDER BY country.country ASC';
 
-		$stmt = $this->getEntityManager ()->getConnection ()->prepare ($rawSql);
-		$stmt->execute ([]);
+        $stmt = $this->getEntityManager()->getConnection()->prepare($rawSql);
+        $stmt->execute([]);
 
-		return $stmt->fetchAll ();
-	}
+        return $stmt->fetchAll();
+    }
 
-	public function getcumulative ()
-	{
+    public function gettotal()
+    {
 
-		$rawSql1 = 'SELECT mamias.first_med_sighting, (SELECT COUNT(DISTINCT mamias.id)) AS Cumulative ' .
-			'FROM mamias WHERE mamias.first_med_sighting IS NOT NULL AND mamias.first_med_sighting != \'\' GROUP BY mamias.first_med_sighting ORDER BY mamias.first_med_sighting';
+        $rawSql1 = 'SELECT mamias.first_med_sighting, (SELECT COUNT(DISTINCT mamias.id)) AS Total ' .
+            'FROM mamias WHERE mamias.first_med_sighting IS NOT NULL AND mamias.first_med_sighting != \'\' GROUP BY mamias.first_med_sighting ORDER BY mamias.first_med_sighting';
 
-		$stmt1 = $this->getEntityManager ()->getConnection ()->prepare ($rawSql1);
-		$stmt1->execute ([]);
+        $stmt1 = $this->getEntityManager()->getConnection()->prepare($rawSql1);
+        $stmt1->execute([]);
 
-		return $stmt1->fetchAll ();
-	}
+        return $stmt1->fetchAll();
+    }
 
-	public function getSpeciesbyGroup ()
-	{
-		$rawSql1 = 'SELECT ecofunctional.ecofunctional , (SELECT COUNT(DISTINCT mamias.id)) AS Value ' .
-			'FROM mamias, ecofunctional WHERE mamias.ecofunctional_id = ecofunctional.id  GROUP BY ecofunctional.ecofunctional';
+    public function getcumulative()
+    {
+        $rawSql1 = 'SELECT mamias.first_med_sighting, sum(count(DISTINCT mamias.id)) OVER (ORDER BY mamias.first_med_sighting) as cumulative ' .
+            'FROM mamias WHERE mamias.first_med_sighting IS NOT NULL AND length(mamias.first_med_sighting) > 0 GROUP BY mamias.first_med_sighting ORDER BY mamias.first_med_sighting';
 
-		$stmt1 = $this->getEntityManager ()->getConnection ()->prepare ($rawSql1);
-		$stmt1->execute ([]);
+        $stmt1 = $this->getEntityManager()->getConnection()->prepare($rawSql1);
+        $stmt1->execute([]);
 
-		return $stmt1->fetchAll ();
-	}
+        return $stmt1->fetchAll();
+    }
 
-	public function getSpeciesbyStatus ()
-	{
-		$rawSql1 = 'SELECT success_type.success_type AS Success, (SELECT COUNT(DISTINCT mamias.id)) AS Value ' .
-			'FROM mamias, success_type WHERE mamias.success_id = success_type.id  GROUP BY success_type.success_type';
+    public function getSpeciesbyGroup()
+    {
+        $rawSql1 = 'SELECT ecofunctional.ecofunctional , (SELECT COUNT(DISTINCT mamias.id)) AS Value ' .
+            'FROM mamias, ecofunctional WHERE mamias.ecofunctional_id = ecofunctional.id  GROUP BY ecofunctional.ecofunctional';
 
-		$stmt1 = $this->getEntityManager ()->getConnection ()->prepare ($rawSql1);
-		$stmt1->execute ([]);
+        $stmt1 = $this->getEntityManager()->getConnection()->prepare($rawSql1);
+        $stmt1->execute([]);
 
-		return $stmt1->fetchAll ();
-	}
+        return $stmt1->fetchAll();
+    }
 
-	public function getSpeciesbyOrigins ()
-	{
-		$rawSql1 = "SELECT split_part( origin.origin_region, ' ' , 1 ) As origin, (SELECT COUNT(DISTINCT mamias.id)) AS Value " .
-			'FROM mamias, origin WHERE mamias.origin_id = origin.id  GROUP BY origin ';
+    public function getSpeciesbyestablishement()
+    {
+        $rawSql1 = 'SELECT success_type.success_type AS Success, (SELECT COUNT(DISTINCT mamias.id)) AS Value ' .
+            'FROM mamias, success_type WHERE mamias.success_id = success_type.id  GROUP BY success_type.success_type';
 
-		$stmt1 = $this->getEntityManager ()->getConnection ()->prepare ($rawSql1);
+        $stmt1 = $this->getEntityManager()->getConnection()->prepare($rawSql1);
+        $stmt1->execute([]);
+
+        return $stmt1->fetchAll();
+    }
+
+    public function getSpeciesbystatus()
+    {
+
+        $rawSql1 = 'SELECT status.status AS status, (SELECT COUNT(DISTINCT mamias.id)) AS Value ' .
+            'FROM mamias, status WHERE mamias.speciesstatus_id = status.id  GROUP BY status.status';
+
+        $stmt1 = $this->getEntityManager()->getConnection()->prepare($rawSql1);
+        $stmt1->execute([]);
+
+        return $stmt1->fetchAll();
+    }
+
+    public function getSpeciesbyOrigins()
+    {
+        $rawSql1 = "SELECT split_part( origin.origin_region, ' ' , 1 ) As origin, (SELECT COUNT(DISTINCT mamias.id)) AS Value " .
+            'FROM mamias, origin WHERE mamias.origin_id = origin.id  GROUP BY origin ';
+
+        $stmt1 = $this->getEntityManager()->getConnection()->prepare($rawSql1);
 		$stmt1->execute ([]);
 
 		return $stmt1->fetchAll ();
