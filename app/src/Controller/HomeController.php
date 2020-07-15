@@ -40,29 +40,30 @@ class HomeController extends AbstractController
 		//laste date mamias
 		$mamDate = $em->getRepository (Mamias::class)->getlastadmddate ();
 		$mamiasDate = $mamDate['max_sig'];
-		//dump ($mamDate);die;
+        //dump ($mamDate);die;
 
-		$NbperCountry = $em->getRepository (Mamias::class)->getSpeciesPerCountry ();
-		$NbperCountry1 = json_encode ($em->getRepository (Mamias::class)->getSpeciesPerCountry ());
-		//$a = json_decode ($NbperCountry1, true);
-		//dump ($NbperCountry1);die;
-		$last = $em->getRepository (Catalogue::class)->getlastadded ();
-		//dump($_ENV);die;
+        $NbperCountry = $em->getRepository(Mamias::class)->getSpeciesPerCountry();
+        $NbperCountry1 = json_encode($em->getRepository(Mamias::class)->getSpeciesPerCountry());
+        //$a = json_decode ($NbperCountry1, true);
+        //dump ($NbperCountry1);die;
+        $last = $em->getRepository(Catalogue::class)->getlastadded();
+        //dump($_ENV);die;
 
-		//draw cumulative numbre of NIS
-		$cumulative = $em->getRepository (Mamias::class)->getcumulative ();
-		//dump($cumulative);die;
-		$datacu = [];
-		$datareg = [];
-		foreach ($cumulative as $values) {
-			$cat[] = [$values['first_med_sighting']];
-			$a = [$values['first_med_sighting'], $values['cumulative']];
-			$b = [(int)$values['first_med_sighting'], $values['cumulative']];
+        //draw cumulative numbre of NIS
+        $total = $em->getRepository(Mamias::class)->gettotal();
+        $cumulative = $em->getRepository(Mamias::class)->getcumulative();
+        //dump($cumulative);die;
+        $datacu = [];
+        $datareg = [];
+        foreach ($cumulative as $values) {
+            $cat[] = [$values['first_med_sighting']];
+            $a = [$values['first_med_sighting'], $values['cumulative']];
+            $b = [(int)$values['first_med_sighting'], (int)$values['cumulative']];
 
-			array_push ($datacu, $a);
-			array_push ($datareg, $b);
+            array_push($datacu, $a);
+            array_push($datareg, $b);
 
-		}
+        }
 		$datacu1 = json_encode ($datacu);
 		$cat1 = json_encode ($cat);
 
@@ -86,3 +87,4 @@ class HomeController extends AbstractController
 		]);
 	}
 }
+
