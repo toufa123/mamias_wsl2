@@ -169,7 +169,7 @@
                 borderWidth: 1,
                 //height: (9 / 16 * 100) + '%',
                 title: {
-                    text: 'Number of Marine NIS by Country',
+                    text: 'Number of Reported Marine NIS by Country',
                     style: {
                         color: '#00AEEF',
                         font: "Roboto Light",
@@ -281,8 +281,7 @@
                     zoomType: 'x'
                 },
                 title: {
-                    text: 'Temporal variability in numbers of new reported marine non-indigenous species ' +
-                        '  & Trends',
+                    text: 'Temporal variability in numbers of new reported marine non-indigenous species ',
                     style: {
                         color: '#00AEEF',
                         font: "Roboto Light",
@@ -337,14 +336,14 @@
                     borderWidth: 1
                 },
                 series: [{
-                    regression: true,
+                    regression: false,
                     regressionSettings: {
                         type: 'linear',
                         color: 'rgb(253,0,0)',
                         legend: "%eq",
                         name: "%eq | r2: %r"
                     },
-                    name: 'Cumulative Number of NIS',
+                    name: 'Number of reported NIS',
                     color: 'rgb(0,174,239)',
                     data: data4
 

@@ -92,27 +92,27 @@ class MedlevelController extends AbstractController
 		$ob8->yAxis->tickInterval (5);
 		$ob8->xAxis->title (['text' => 'Years']);
 		$ob8->yAxis->title (['text' => 'Numbre of NIS']);
-		$ob8->plotOptions->line (
-			[
-				'allowPointSelect' => true,
-				'cursor' => 'pointer',
-				//'dataLabels' => ['enabled' => true],
-				'showInLegend' => true,
-				//'pointStart' => 1792
-			]
-		);
+        $ob8->plotOptions->line(
+            [
+                'allowPointSelect' => true,
+                'cursor' => 'pointer',
+                //'dataLabels' => ['enabled' => true],
+                'showInLegend' => true,
+                //'pointStart' => 1792
+            ]
+        );
 
-		$ob8->series ([['name' => 'Cumulative Number of NIS', 'color' => '#00AEEF', 'data' => $datacu]]);
-		//Ecofunctional Groups of NIS
-		$groups = $em->getRepository (Mamias::class)->getSpeciesbyGroup ();
-		//dump($groups); die;
-		$data = [];
-		foreach ($groups as $values) {
-			$a = [$values['ecofunctional'], $values['value']];
-			array_push ($data, $a);
-		}
-		$ob3 = new Highchart();
-		$ob3->chart->renderTo ('piechart1');
+        $ob8->series([['name' => 'numbers of new reported marine non-indigenous species', 'color' => '#00AEEF', 'data' => $datacu]]);
+        //Ecofunctional Groups of NIS
+        $groups = $em->getRepository(Mamias::class)->getSpeciesbyGroup();
+        //dump($groups); die;
+        $data = [];
+        foreach ($groups as $values) {
+            $a = [$values['ecofunctional'], $values['value']];
+            array_push($data, $a);
+        }
+        $ob3 = new Highchart();
+        $ob3->chart->renderTo('piechart1');
 		$ob3->chart->style (['fontFamily' => 'roboto']);
 		$ob3->title->text ('Ecofunctional Groups of NIS');
 		$ob3->title->style (
