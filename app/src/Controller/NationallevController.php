@@ -55,7 +55,7 @@ class NationallevController extends AbstractController
             $n2 = $em->getRepository (Mamias::class)->findnumbersByestablished ($co);
             $n3 = $em->getRepository (Mamias::class)->findnumbersByInvasive ($co);
 
-            $n4 = $em->getRepository (Mamias::class)->getcumulativebyCountry ($co);
+            $n4 = $em->getRepository(Mamias::class)->getcumulativebyCountry1($co);
             //$this->addFlash('success', 'The country Selected is ' . $c);
 
             //dump($n4);die;
@@ -88,7 +88,7 @@ class NationallevController extends AbstractController
                 ]
             );
 
-            $ob->series ([['name' => 'Cumulative Number of NIS', 'color' => '#00AEEF', 'data' => $datacu]]);
+            $ob->series([['name' => 'Total Number of Reported NIS', 'color' => '#00AEEF', 'data' => $datacu]]);
 
             //groups per country
             $n6 = $em->getRepository (Mamias::class)->getSpeciesbyGroupandCountry ($co);
@@ -136,8 +136,8 @@ class NationallevController extends AbstractController
             $ob3 = new Highchart();
             $ob3->lang->noData ("No Data to display");
             $ob3->chart->options3d (['enabled' => true, 'alpha' => '5', 'beta' => '30', 'depth' => '100', 'viewDistance' => '25']);
-            $ob3->chart->renderTo ('barchart1');
-            $ob3->title->text ('Origin of the NIS');
+            $ob3->chart->renderTo('barchart1');
+            $ob3->title->text('Origin of the Reported NIS');
 
 
             $ob3->yAxis->title (['text' => 'Numbre of NIS']);
@@ -167,9 +167,9 @@ class NationallevController extends AbstractController
             $ob4 = new Highchart();
 
             $ob4->lang->noData ("No Data to display");
-            $ob4->chart->renderTo ('barchart2');
-            $ob4->title->text ('Pathways/vectors of NIS');
-            $ob4->yAxis->title (['text' => 'Numbre of NIS']);
+            $ob4->chart->renderTo('barchart2');
+            $ob4->title->text('Number of Reported NIS by Pathways/vectors');
+            $ob4->yAxis->title(['text' => 'Numbre of NIS']);
             $ob4->xAxis->categories ($categories);
             $ob4->yAxis->allowDecimals (false);
             $ob4->title->style (['fontFamily' => 'Roboto light', 'fontSize' => '18px', 'color' => '#00AEEF', 'fontWeight' => 'bold']);
