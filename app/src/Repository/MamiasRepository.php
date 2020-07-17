@@ -126,7 +126,8 @@ class MamiasRepository extends ServiceEntityRepository
             ->leftJoin('m.speciesstatus', 'speciesstatus')
             ->addSelect('speciesstatus.status')
             ->leftJoin('m.Pathway', 'Pathway')
-            ->addSelect('Pathway.VectorName');;
+            ->leftJoin('pathway.VectorName', 'vector')
+            ->addSelect('vector.vectorName');
         if (!empty($sId)) {
             $query = $query->Where('m.relation = :val')
                 ->setParameter('val', $sId);
