@@ -19,7 +19,7 @@ services:
       #- memcached
       #- ftp
     ports:
-      - "8000:80"
+      - "80:80"
       - "8443:443"
       #- "10022:22"
     volumes:
@@ -62,11 +62,11 @@ services:
       dockerfile: Postgres.Dockerfile
     #    dockerfile: Postgres-9.5.Dockerfile
     ports:
-      - 5432:5432
+      - 15432:5432
     volumes:
       #  - solr:/opt/solr/server/solr/data
       - postgres_data:/var/lib/postgresql/data
-      - ./backup/mamias15072020.sql:/docker-entrypoint-initdb.d/setup-db.sql
+      - ./backup/mamias17072020.sql:/docker-entrypoint-initdb.d/setup-db.sql
 
     environment:
       - ALLOW_IP_RANGE=0.0.0.0/0
@@ -154,7 +154,7 @@ services:
     container_name: "pgadmin4"
     image: dpage/pgadmin4
     ports:
-      - "9002:80"
+      - "9010:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: atef.ouerghi@spa-rac.org
       PGADMIN_DEFAULT_PASSWORD: toufa_2512
@@ -174,8 +174,8 @@ services:
     image: djfarrelly/maildev
     restart: always
     ports:
-      - "1080:80" # smtp server
-      - "1025:25"
+      - "1081:80" # smtp server
+      - "1026:25"
     labels:
       - "traefik.http.services.MAMIAS_mail.loadbalancer.server.port=1025"
       - "traefik.http.routers.MAMIAS_mail.rule=Host(`mail.mamias.localhost`)"
@@ -187,7 +187,7 @@ services:
     container_name: "mamias_portainer"
     restart: always
     ports:
-      - "9001:80"
+      - "9002:80"
     command: --no-auth -H unix:///var/run/docker.sock
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
